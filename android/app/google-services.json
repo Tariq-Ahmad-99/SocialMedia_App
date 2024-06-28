@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "995050283484",
+    "project_id": "pekimedia-539fa",
+    "storage_bucket": "pekimedia-539fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995050283484:android:67bf1a36556b30bdbe2f19",
+        "android_client_info": {
+          "package_name": "com.example.peki_media"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_V6tnEpSrpal6mFmhZHW5TB6P2U79LfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
