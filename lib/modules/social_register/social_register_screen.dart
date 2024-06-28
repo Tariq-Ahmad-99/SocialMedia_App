@@ -127,12 +127,12 @@ class SocialRegisterScreen extends StatelessWidget
                             {
                               if (formKey.currentState!.validate())
                               {
-                                // SocialRegisterCubit.get(context).userRegister(
-                                //   name:nameController.text,
-                                //   email: emailController.text,
-                                //   password: passwordController.text,
-                                //   phone: phoneController.text,
-                                // );
+                                SocialRegisterCubit.get(context).userRegister(
+                                  name:nameController.text,
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  phone: phoneController.text,
+                                );
                               }
                             },
                             text: 'register',
