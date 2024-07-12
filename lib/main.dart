@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/modules/social_login/social_login_screen.dart';
-import 'package:peki_media/modules/social_register/social_register_screen.dart';
 import 'package:peki_media/shared/Bloc_observer.dart';
 import 'package:peki_media/shared/network/local/cache_helper.dart';
 import 'package:peki_media/shared/network/remote/dio_helper.dart';
@@ -27,29 +26,10 @@ void main() async
   print(token);
 
 
-  // Widget widget;
-
-  // bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
-  //
-  // if(onBoarding != null)
-  // {
-  //   if(token != null) {
-  //     widget = const ShopLayout();
-  //   } else {
-  //     widget = ShopLoginScreen();
-  //   }
-  // }
-  // else
-  // {
-  //   widget = const OnBoardingScreen();
-  // }
-
-
   isDark ??= false;
 
   runApp( MyApp(
     isDark: isDark,
-    // startWidget: widget,
   ));
 }
 
@@ -80,9 +60,6 @@ class MyApp extends StatelessWidget
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,
-        // // //themeMode: ShopCubit.get(context).isDark
-        // //     ? ThemeMode.dark
-        // //     : ThemeMode.light,
         home: SocialLoginScreen(),
       ),
     );

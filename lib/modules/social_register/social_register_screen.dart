@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../layout/social_layout.dart';
 import '../../shared/components/components.dart';
 import '../../shared/components/contents.dart';
 import '../../shared/network/local/cache_helper.dart';
@@ -22,9 +23,12 @@ class SocialRegisterScreen extends StatelessWidget
       child: BlocConsumer<SocialRegisterCubit, SocialRegisterState>(
         listener: (context, state)
         {
-          if(state is SocialRegisterSuccessState)
+          if(state is SocialCreateUserSuccessState)
           {
-
+            navigateAndFinish(
+              context,
+              SocialLayout(),
+            );
           }
         },
         builder: (context, state)

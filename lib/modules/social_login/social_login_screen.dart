@@ -19,7 +19,15 @@ class SocialLoginScreen extends StatelessWidget
     return BlocProvider(
       create: (BuildContext context) => SocialLoginCubit(),
       child: BlocConsumer<SocialLoginCubit, SocialLoginState>(
-        listener: (context, state){},
+        listener: (context, state)
+        {
+          if(state is SocialLoginErrorState){
+            showToast(
+                text: state.error,
+                state: ToastStates.error,
+            );
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(),
@@ -67,10 +75,10 @@ class SocialLoginScreen extends StatelessWidget
                           {
                             if (formKey.currentState!.validate())
                             {
-                              // SocialLoginCubit.get(context).userLogin(
-                              //   email: emailController.text,
-                              //   password: passwordController.text,
-                              // );
+                              SocialLoginCubit.get(context).userLogin(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
                             }
                           },
                           isPassword: SocialLoginCubit.get(context).isPassword,
@@ -97,10 +105,10 @@ class SocialLoginScreen extends StatelessWidget
                             {
                               if (formKey.currentState!.validate())
                               {
-                                // SocialLoginCubit.get(context).userLogin(
-                                //   email: emailController.text,
-                                //   password: passwordController.text,
-                                // );
+                                SocialLoginCubit.get(context).userLogin(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
                               }
                             },
                             text: 'login',
