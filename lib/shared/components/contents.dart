@@ -1,5 +1,3 @@
-import '../network/local/cache_helper.dart';
-import 'components.dart';
 
 // void signOut (context)
 // {
@@ -20,3 +18,4 @@ void printFullText(String text)
 }
 
 String token = '';
+String uId = '';

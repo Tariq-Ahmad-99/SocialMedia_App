@@ -36,7 +36,6 @@ class SocialRegisterCubit extends Cubit<SocialRegisterState>{
               uId: value.user!.uid,
               phone: phone,
           );
-          emit(SocialRegisterSuccessState());
     })
         .catchError((error) {
       emit(SocialRegisterErrorState(error.toString()));
@@ -56,7 +55,9 @@ class SocialRegisterCubit extends Cubit<SocialRegisterState>{
         name: name,
         email: email,
         phone: phone,
-        uId: uId);
+        uId: uId,
+        isEmailVerified: false,
+    );
 
     FirebaseFirestore.instance
         .collection('users')

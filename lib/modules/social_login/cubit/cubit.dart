@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/modules/social_login/cubit/states.dart';
@@ -24,7 +23,7 @@ class SocialLoginCubit extends Cubit<SocialLoginState>{
     ).then((value) {
       print(value.user?.email);
       print(value.user?.uid);
-      emit(SocialLoginSuccessState());
+      emit(SocialLoginSuccessState(value.user!.uid));
     }).catchError((error) {
       emit(SocialLoginErrorState(error.toString()));
     });
