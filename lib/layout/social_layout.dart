@@ -1,11 +1,9 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
-import 'package:peki_media/shared/components/components.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+
 
 class SocialLayout extends StatelessWidget
 {
@@ -16,70 +14,49 @@ class SocialLayout extends StatelessWidget
   {
     return BlocConsumer<SocialCubit, SocialState>(
       listener: (context, state) {},
-      builder: (context, state) {
+      builder: (context, state)
+      {
+        var cubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text(
+            title: const Text(
               'News Feed',
             ),
           ),
-          body: ConditionalBuilder(
-            condition: SocialCubit.get(context).model != null,
-            builder: (context)
+          body: cubit.screens[cubit.currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: cubit.currentIndex,
+            onTap: (index)
             {
-              var model = FirebaseAuth.instance.currentUser!.emailVerified;
-              print(model);
-
-              return Column(
-                children:
-                [
-                  if(!model)
-                  Container(
-                    color: Colors.amber.withOpacity(.6),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                      ),
-                      child: Row(
-                        children:
-                        [
-                          Icon(
-                            Icons.info_outline,
-                          ),
-                          SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'please verify your email',
-                            ),
-                          ),
-                          SizedBox(
-                            width: 15.0,
-                          ),
-                          defaultTextButton(
-                            function: ()
-                            {
-                              FirebaseAuth.instance.currentUser?.sendEmailVerification()
-                                  .then((value) 
-                              {
-                                showToast(
-                                    text: 'Check Your Mail',
-                                    state: ToastStates.success,
-                                );
-                              })
-                                  .catchError((error) {});
-                            },
-                            text: 'send',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
+              cubit.changeBottomNav(index);
             },
-            fallback: (context) => Center(child: CircularProgressIndicator()),
+            items: 
+            const [
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    EvaIcons.home,
+                  ),
+                  label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  EvaIcons.messageSquare,
+                ),
+                label: 'Chats',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  EvaIcons.people,
+                ),
+                label: 'Users',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  EvaIcons.settings,
+                ),
+                label: 'Settings',
+              ),
+            ],
           ),
         );
       },

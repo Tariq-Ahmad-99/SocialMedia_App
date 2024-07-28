@@ -15,6 +15,7 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: HexColor('333739'),
     elevation: 0.0,
     titleTextStyle: const TextStyle(
+      fontFamily: 'Jannah',
       color: Colors.white,
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
@@ -54,6 +55,7 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white,
     elevation: 0.0,
     titleTextStyle: TextStyle(
+      fontFamily: 'Jannah',
       color: Colors.black,
       fontSize: 20.0,
       fontWeight: FontWeight.bold,

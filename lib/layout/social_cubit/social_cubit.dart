@@ -1,8 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
 import 'package:peki_media/models/user_model.dart';
+import 'package:peki_media/modules/chats/chats_screen.dart';
+import 'package:peki_media/modules/feeds/feeds_screen.dart';
+import 'package:peki_media/modules/settings/settings_screen.dart';
+import 'package:peki_media/modules/users/users_screen.dart';
 
 import '../../shared/components/contents.dart';
 
@@ -33,4 +38,20 @@ class SocialCubit extends Cubit<SocialState>
     });
 
   }
+
+  int currentIndex = 0;
+
+  List<Widget> screens = [
+    FeedsScreen(),
+    ChatsScreen(),
+    UsersScreen(),
+    SettingsScreen(),
+  ];
+
+  void changeBottomNav(int index)
+  {
+    currentIndex = index;
+    emit(SocialChangeBottomNavState());
+  }
+
 }

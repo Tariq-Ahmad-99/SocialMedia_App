@@ -51,6 +51,7 @@ dependencies:
   firebase_core: ^3.1.1
   firebase_auth: ^5.1.1
   cloud_firestore: ^5.1.0
+  eva_icons_flutter: ^3.1.0
 
 
 dev_dependencies:
@@ -74,6 +75,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+
+  fonts:
+    - family: Jannah
+      fonts:
+        - asset: lib/assets/fonts/jannah.ttf
+          weight: 700
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

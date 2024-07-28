@@ -24,13 +24,11 @@ void main() async
 
   bool? isDark = CacheHelper.getData(key: 'isDark');
   //String? token = CacheHelper.getData(key: 'token');
-  uId = CacheHelper.getData(key: 'uId');
+  uId = CacheHelper.getData(key: 'uId')?? '';
 
-  if(uId != null)
-  {
+  if (uId.isNotEmpty) {
     widget = SocialLayout();
-  } else
-  {
+  } else {
     widget = SocialLoginScreen();
   }
 

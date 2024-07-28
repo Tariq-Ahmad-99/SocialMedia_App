@@ -15,6 +15,8 @@ class SocialLoginScreen extends StatelessWidget
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  SocialLoginScreen({super.key});
+
   @override
   Widget build(BuildContext context)
   {
