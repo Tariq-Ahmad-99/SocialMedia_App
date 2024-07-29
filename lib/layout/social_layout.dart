@@ -19,9 +19,23 @@ class SocialLayout extends StatelessWidget
         var cubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
-              'News Feed',
+            title: Text(
+              cubit.titles[cubit.currentIndex],
             ),
+            actions: [
+              IconButton(
+                onPressed: (){},
+                icon: Icon(
+                  EvaIcons.bellOutline,
+                ),
+              ),
+              IconButton(
+                onPressed: (){},
+                icon: Icon(
+                  EvaIcons.searchOutline,
+                ),
+              ),
+            ],
           ),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
