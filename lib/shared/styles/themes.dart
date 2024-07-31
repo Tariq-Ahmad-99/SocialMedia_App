@@ -45,6 +45,12 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.white,
     ),
+    bodyMedium: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      height: 1.3,
+    ),
   ),
   fontFamily: 'Jannah',
 );
@@ -89,6 +95,12 @@ ThemeData lightTheme = ThemeData(
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
       color: Colors.black,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      height: 1.3,
     ),
   ),
   fontFamily: 'Jannah',
