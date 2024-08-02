@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:peki_media/modules/New_Post/new_post_screen.dart';
+import 'package:peki_media/shared/components/components.dart';
 
 
 class SocialLayout extends StatelessWidget
@@ -13,7 +15,16 @@ class SocialLayout extends StatelessWidget
   Widget build(BuildContext context)
   {
     return BlocConsumer<SocialCubit, SocialState>(
-      listener: (context, state) {},
+      listener: (context, state)
+      {
+        if(state is SocialNewPostState)
+        {
+          navigateTo(
+            context,
+            NewPostScreen(),
+          );
+        }
+      },
       builder: (context, state)
       {
         var cubit = SocialCubit.get(context);
@@ -57,6 +68,12 @@ class SocialLayout extends StatelessWidget
                   EvaIcons.messageSquare,
                 ),
                 label: 'Chats',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.post_add_outlined,
+                ),
+                label: 'Post',
               ),
               BottomNavigationBarItem(
                 icon: Icon(

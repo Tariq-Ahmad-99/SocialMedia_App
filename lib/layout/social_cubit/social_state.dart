@@ -14,3 +14,5 @@ class SocialGetUserErrorState extends SocialState
 
 class SocialChangeBottomNavState extends SocialState {}
 
+class SocialNewPostState extends SocialState {}
+

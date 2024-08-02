@@ -56,8 +56,15 @@ class SocialCubit extends Cubit<SocialState>
 
   void changeBottomNav(int index)
   {
-    currentIndex = index;
-    emit(SocialChangeBottomNavState());
+
+    if(index == 2)
+      emit(SocialNewPostState());
+    else
+    {
+      currentIndex = index;
+      emit(SocialChangeBottomNavState());
+    }
+
   }
 
 }
