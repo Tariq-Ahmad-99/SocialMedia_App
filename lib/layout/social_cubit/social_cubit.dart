@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
 import 'package:peki_media/models/user_model.dart';
+import 'package:peki_media/modules/New_Post/new_post_screen.dart';
 import 'package:peki_media/modules/chats/chats_screen.dart';
 import 'package:peki_media/modules/feeds/feeds_screen.dart';
 import 'package:peki_media/modules/settings/settings_screen.dart';
@@ -44,12 +45,14 @@ class SocialCubit extends Cubit<SocialState>
   List<Widget> screens = [
     FeedsScreen(),
     ChatsScreen(),
+    NewPostScreen(),
     UsersScreen(),
     SettingsScreen(),
   ];
   List<String> titles = [
     'Home',
     'Chats',
+    'Post',
     'Users',
     'Settings',
   ];
