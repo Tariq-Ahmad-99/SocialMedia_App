@@ -1,57 +1,193 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peki_media/layout/social_cubit/social_cubit.dart';
+import 'package:peki_media/layout/social_cubit/social_state.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatelessWidget 
+{
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context)
   {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children:
-        [
-          Container(
-            height: 190.0,
-            child: Stack(
-              alignment: AlignmentDirectional.bottomCenter,
-              children:
-              [
-                Align(
-                  alignment: AlignmentDirectional.topCenter,
-                  child: Container(
-                    height: 140.0,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4.0),
-                        topRight: Radius.circular(4.0),
-                      ),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://img.freepik.com/free-vector/flat-twitch-banner-template-indian-republic-day_23-2151031339.jpg?t=st=1722855611~exp=1722859211~hmac=144ec11ced5acab93dc18df8d6b4e7a5bb91fd3165dcd1e4a12e2ae16c214f9d&w=1060'
+    return BlocConsumer<SocialCubit, SocialState>(
+      listener: (context, state) {},
+      builder: (context, state)
+      {
+        var userModel = SocialCubit.get(context).model;
+
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children:
+            [
+              Container(
+                height: 190.0,
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children:
+                  [
+                    Align(
+                      alignment: AlignmentDirectional.topCenter,
+                      child: Container(
+                        height: 140.0,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
+                          ),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                '${userModel?.cover}'
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    CircleAvatar(
+                      radius: 64.0,
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      child: CircleAvatar(
+                        radius: 60.0,
+                        backgroundImage: NetworkImage(
+                            '${userModel?.image}'
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 5.0,
+              ),
+              Text(
+                '${userModel?.name}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              SizedBox(
+                height: 5.0,
+              ),
+              Text(
+                '${userModel?.bio}',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.grey,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20.0,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        child: Column(
+                          children: [
+                            Text(
+                              '100',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                              'Post',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: (){},
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        child: Column(
+                          children: [
+                            Text(
+                              '265',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                              'Photos',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: (){},
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        child: Column(
+                          children: [
+                            Text(
+                              '10k',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                              'Followers',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: (){},
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        child: Column(
+                          children: [
+                            Text(
+                              '64',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                              'Followings',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: (){},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {  },
+                      child: Text(
+                        'Add Photos',
                       ),
                     ),
                   ),
-                ),
-                CircleAvatar(
-                  radius: 64.0,
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: CircleAvatar(
-                    radius: 60.0,
-                    backgroundImage: NetworkImage(
-                        'https://img.freepik.com/premium-photo/pretty-smiling-girl-swiping-imaginary-touch-screen-color-background-people-future-technology_274234-15776.jpg?ga=GA1.1.1892330260.1722245478&semt=ais_user'
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  OutlinedButton(
+                    onPressed: () {  },
+                    child: Icon(
+                      EvaIcons.edit2Outline,
+                      size: 18.0,
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
