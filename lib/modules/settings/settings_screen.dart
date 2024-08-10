@@ -16,7 +16,7 @@ class SettingsScreen extends StatelessWidget
       listener: (context, state) {},
       builder: (context, state)
       {
-        var userModel = SocialCubit.get(context).model;
+        var userModel = SocialCubit.get(context).userModel;
 
         return Padding(
           padding: const EdgeInsets.all(8.0),

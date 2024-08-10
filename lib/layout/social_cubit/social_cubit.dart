@@ -18,7 +18,7 @@ class SocialCubit extends Cubit<SocialState>
 
   static SocialCubit get(context) => BlocProvider.of(context);
 
-  SocialUserModel? model;
+  SocialUserModel? userModel;
 
   void getUserData()
   {
@@ -30,7 +30,7 @@ class SocialCubit extends Cubit<SocialState>
         .get()
         .then((value) {
           //print(value.data());
-          model = SocialUserModel.fromJson(value.data()!);
+          userModel = SocialUserModel.fromJson(value.data()!);
           emit(SocialGetUserSuccessState());
     })
         .catchError((error) {

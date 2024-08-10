@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../modules/wep_view/wep_view_screen.dart';
@@ -182,6 +183,28 @@ Widget defaultFormField({
     ) : null,
     border: const OutlineInputBorder(),
   ),
+);
+
+PreferredSizeWidget defaultAppBar({
+  required BuildContext context,
+  String? title,
+  List<Widget>? actions,
+})=> AppBar(
+  leading: IconButton(
+    onPressed: ()
+    {
+      Navigator.pop(context);
+    },
+    icon: Icon(
+      EvaIcons.arrowCircleLeftOutline,
+      size: 28.0,
+      color: defaultColor,
+    ),
+  ),
+  title: Text(
+    title!,
+  ),
+  actions: actions,
 );
 
 Widget defaultButton({
