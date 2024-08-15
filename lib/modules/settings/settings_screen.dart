@@ -1,9 +1,11 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
+import 'package:peki_media/shared/components/components.dart';
+
+import '../edit_profile/edit_profile_screen.dart';
 
 class SettingsScreen extends StatelessWidget 
 {
@@ -176,7 +178,12 @@ class SettingsScreen extends StatelessWidget
                     width: 10.0,
                   ),
                   OutlinedButton(
-                    onPressed: () {  },
+                    onPressed: () { 
+                      navigateTo(
+                        context,
+                        EditProfileScreen(),
+                      );
+                    },
                     child: Icon(
                       EvaIcons.edit2Outline,
                       size: 18.0,
