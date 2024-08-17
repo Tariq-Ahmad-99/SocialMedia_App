@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
-
 import '../../shared/components/components.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final nameController = TextEditingController(); //it was var not final but i changed it for tha warning
-  final bioController = TextEditingController(); //it was var not final but i changed it for tha warning
+  var nameController = TextEditingController();
+  var phoneController = TextEditingController();
+  var bioController = TextEditingController();
 
-  EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +17,26 @@ class EditProfileScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var userModel = SocialCubit.get(context).userModel;
+        var profileImage = SocialCubit.get(context).profileImage;
+        var coverImage = SocialCubit.get(context).coverImage;
+
+        nameController.text = userModel!.name!;
+        phoneController.text = userModel.phone!;
+        bioController.text = userModel.bio!;
+
         return Scaffold(
           appBar: defaultAppBar(
             context: context,
             title: 'Edit Profile',
             actions: [
               defaultTextButton(
-                function: () {},
+                function: () {
+                  SocialCubit.get(context).updateUser(
+                      name: nameController.text,
+                      phone: phoneController.text,
+                      bio: bioController.text,
+                  );
+                },
                 text: 'Update',
               ),
               SizedBox(
@@ -36,6 +48,11 @@ class EditProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+                if(state is SocialUserUpdateLoadingState)
+                  LinearProgressIndicator(),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Container(
                   height: 190.0,
                   child: Stack(
@@ -55,13 +72,17 @@ class EditProfileScreen extends StatelessWidget {
                                   topRight: Radius.circular(4.0),
                                 ),
                                 image: DecorationImage(
-                                  image: NetworkImage('${userModel?.cover}'),
+                                  image: coverImage == null
+                                      ? NetworkImage('${userModel.cover}')
+                                      : FileImage(coverImage) as ImageProvider<Object> ,
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                SocialCubit.get(context).getCoverImage();
+                              },
                               icon: CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 radius: 18.0,
@@ -84,12 +105,16 @@ class EditProfileScreen extends StatelessWidget {
                                 Theme.of(context).scaffoldBackgroundColor,
                             child: CircleAvatar(
                               radius: 60.0,
-                              backgroundImage:
-                                  NetworkImage('${userModel?.image}'),
+                              backgroundImage: profileImage == null
+                                  ? NetworkImage('${userModel.image}')
+                                  : FileImage(profileImage)
+                                      as ImageProvider<Object>,
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              SocialCubit.get(context).getProfileImage();
+                            },
                             icon: CircleAvatar(
                               backgroundColor: Colors.blue,
                               radius: 18.0,
@@ -134,6 +159,21 @@ class EditProfileScreen extends StatelessWidget {
                   },
                   label: 'Bio',
                   prefix: EvaIcons.infoOutline,
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                defaultFormField(
+                  controller: phoneController,
+                  type: TextInputType.phone,
+                  validate: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'phone number must not be empty';
+                    }
+                    return null;
+                  },
+                  label: 'Phone',
+                  prefix: EvaIcons.phoneCallOutline,
                 ),
               ],
             ),

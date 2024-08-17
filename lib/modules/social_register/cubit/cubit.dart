@@ -50,7 +50,6 @@ class SocialRegisterCubit extends Cubit<SocialRegisterState>{
     required String phone,
   })
   {
-
     SocialUserModel model = SocialUserModel(
         name: name,
         email: email,

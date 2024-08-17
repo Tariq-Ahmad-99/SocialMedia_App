@@ -1,23 +1,23 @@
 class SocialUserModel
 {
-  late String name;
-  late String email;
-  late String phone;
-  late String uId;
-  late String image;
-  late String cover;
-  late String bio;
-  late bool isEmailVerified;
+  String? name;
+  String? email;
+  String? phone;
+  String? uId;
+  String? image;
+  String? cover;
+  String? bio;
+  bool? isEmailVerified;
 
   SocialUserModel({
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.uId,
-    required this.image,
-    required this.cover,
-    required this.bio,
-    required this.isEmailVerified
+    this.name,
+    this.email,
+    this.phone,
+    this.uId,
+    this.image,
+    this.cover,
+    this.bio,
+    this.isEmailVerified
   });
 
   SocialUserModel.fromJson(Map<String, dynamic> json)
