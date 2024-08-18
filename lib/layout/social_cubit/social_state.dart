@@ -2,8 +2,8 @@ abstract class SocialState {}
 
 class SocialInitialState extends SocialState{}
 
+//GET User Data
 class SocialGetUserLoadingState extends SocialState{}
-
 class SocialGetUserSuccessState extends SocialState{}
 class SocialGetUserErrorState extends SocialState
 {
@@ -16,6 +16,7 @@ class SocialChangeBottomNavState extends SocialState {}
 
 class SocialNewPostState extends SocialState {}
 
+//Picking And Uploading Images
 class SocialProfileImagePickedSuccessState extends SocialState {}
 class SocialProfileImagePickedErrorState extends SocialState {}
 
@@ -28,6 +29,16 @@ class SocialUploadProfileImageErrorState extends SocialState {}
 class SocialUploadCoverImageSuccessState extends SocialState {}
 class SocialUploadCoverImageErrorState extends SocialState {}
 
+//User Update
 class SocialUserUpdateLoadingState extends SocialState {}
-
 class SocialUserUpdateErrorState extends SocialState {}
+
+//Create Post
+class SocialCreatePostLoadingState extends SocialState {}
+class SocialCreatePostSuccessState extends SocialState {}
+class SocialCreatePostErrorState extends SocialState {}
+
+class SocialPostImagePickedSuccessState extends SocialState {}
+class SocialPostImagePickedErrorState extends SocialState {}
+
+class SocialRemovePostImageState extends SocialState {}

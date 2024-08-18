@@ -10,7 +10,6 @@ class EditProfileScreen extends StatelessWidget {
   var phoneController = TextEditingController();
   var bioController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialState>(

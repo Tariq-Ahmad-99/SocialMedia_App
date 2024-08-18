@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
+import 'package:peki_media/models/post_model.dart';
 import 'package:peki_media/models/user_model.dart';
 import 'package:peki_media/modules/New_Post/new_post_screen.dart';
 import 'package:peki_media/modules/chats/chats_screen.dart';
@@ -64,10 +65,8 @@ class SocialCubit extends Cubit<SocialState> {
     }
   }
 
-  File? profileImage;
-  File? coverImage;
   var picker = ImagePicker();
-
+  File? profileImage;
   Future getProfileImage() async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -78,19 +77,6 @@ class SocialCubit extends Cubit<SocialState> {
     } else {
       print('No image selected');
       emit(SocialProfileImagePickedErrorState());
-    }
-  }
-
-  Future getCoverImage() async {
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      coverImage = File(pickedFile.path);
-      emit(SocialCoverImagePickedSuccessState());
-    } else {
-      print('No image selected');
-      emit(SocialCoverImagePickedErrorState());
     }
   }
 
@@ -123,6 +109,19 @@ class SocialCubit extends Cubit<SocialState> {
     });
   }
 
+  File? coverImage;
+  Future getCoverImage() async {
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      coverImage = File(pickedFile.path);
+      emit(SocialCoverImagePickedSuccessState());
+    } else {
+      print('No image selected');
+      emit(SocialCoverImagePickedErrorState());
+    }
+  }
 
   void uploadCoverImage({
     required String name,
@@ -152,6 +151,7 @@ class SocialCubit extends Cubit<SocialState> {
       emit(SocialUploadCoverImageErrorState());
     });
   }
+
 //
 //   void updateUserImages({
 //     required String name,
@@ -207,6 +207,82 @@ class SocialCubit extends Cubit<SocialState> {
     })
         .catchError((error) {
       emit(SocialUserUpdateErrorState());
+    });
+  }
+
+  File? postImage;
+  Future getPostImage() async {
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      postImage = File(pickedFile.path);
+      emit(SocialPostImagePickedSuccessState());
+    } else {
+      print('No image selected');
+      emit(SocialPostImagePickedErrorState());
+    }
+  }
+
+  void removePostImage(){
+    postImage = null;
+    emit(SocialRemovePostImageState());
+  }
+
+  void uploadPostImage({
+    required String dateTime,
+    required String text,
+})
+  {
+    emit(SocialCreatePostLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('posts/${Uri.file(postImage!.path).pathSegments.last}')
+        .putFile(postImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value)
+      {
+        print(value);
+        createPost(
+          dateTime: dateTime,
+          text: text,
+          postImage: value,
+        );
+      }).catchError((error){
+        emit(SocialCreatePostErrorState());
+      });
+    }).catchError((error) {
+      emit(SocialCreatePostErrorState());
+    });
+  }
+
+  void createPost({
+    required String dateTime,
+    required String text,
+    String? postImage,
+  })
+  {
+    emit(SocialCreatePostLoadingState());
+
+    PostModel model = PostModel(
+      name: userModel!.name,
+      image: userModel!.image,
+      uId: userModel!.uId,
+      dateTime: dateTime,
+      text: text,
+      postImage: postImage??'',
+    );
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add(model.toMap())
+        .then((value)
+    {
+      emit(SocialCreatePostSuccessState());
+    })
+        .catchError((error)
+    {
+      emit(SocialCreatePostErrorState());
     });
   }
 }
