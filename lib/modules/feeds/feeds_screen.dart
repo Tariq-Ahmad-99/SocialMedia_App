@@ -1,7 +1,11 @@
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peki_media/layout/social_cubit/social_cubit.dart';
+import 'package:peki_media/layout/social_cubit/social_state.dart';
+import 'package:peki_media/models/post_model.dart';
 
 import '../../shared/styles/colors.dart';
 
@@ -11,55 +15,67 @@ class FeedsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5.0,
-            margin: EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: AlignmentDirectional.topCenter,
+    return BlocConsumer<SocialCubit, SocialState>(
+      listener:(context, state) {},
+      builder: (context, state) {
+        return ConditionalBuilder(
+          condition: SocialCubit.get(context).posts.length > 0 && SocialCubit.get(context).userModel != null,
+          builder: (context) => SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
               children: [
-                Image(
-                  image: NetworkImage(
-                    'https://img.freepik.com/free-photo/smartphone-screen-hand-with-social-media-icons_53876-128999.jpg?t=st=1722246240~exp=1722249840~hmac=ca047e0d68580497429c72a375d3edb584a38376135da55ff45d333c75c3f2c2&w=900'
+                Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 5.0,
+                  margin: EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: AlignmentDirectional.topCenter,
+                    children: [
+                      Image(
+                        image: NetworkImage(
+                            'https://img.freepik.com/free-photo/smartphone-screen-hand-with-social-media-icons_53876-128999.jpg?t=st=1722246240~exp=1722249840~hmac=ca047e0d68580497429c72a375d3edb584a38376135da55ff45d333c75c3f2c2&w=900'
+                        ),
+                        fit: BoxFit.fitWidth,
+                        height: 200.0,
+                        width: double.infinity,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Communicate With Friends',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  fit: BoxFit.fitWidth,
-                  height: 200.0,
-                  width: double.infinity,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Communicate With Friends',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                    ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => buildPostItem(
+                      SocialCubit.get(context).posts[index], context, index),
+                  separatorBuilder: (context , index) => SizedBox(
+                    height: 8.0,
                   ),
+                  itemCount: SocialCubit.get(context).posts.length,
+                ),
+                SizedBox(
+                  height: 8.0,
                 ),
               ],
             ),
           ),
-          ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => buildPostItem(context),
-              separatorBuilder: (context , index) => SizedBox(
-                height: 8.0,
-              ),
-              itemCount: 10,
+          fallback: (context) => Center(
+              child: CircularProgressIndicator(),
           ),
-          SizedBox(
-            height: 8.0,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget buildPostItem(context) => Card(
+  Widget buildPostItem(PostModel model, context, index) => Card(
     clipBehavior: Clip.antiAliasWithSaveLayer,
     elevation: 5.0,
     margin: EdgeInsets.symmetric(
@@ -68,6 +84,7 @@ class FeedsScreen extends StatelessWidget {
     child: Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children:
         [
           Row(
@@ -75,7 +92,7 @@ class FeedsScreen extends StatelessWidget {
               CircleAvatar(
                 radius: 25.0,
                 backgroundImage: NetworkImage(
-                    'https://img.freepik.com/premium-photo/pretty-smiling-girl-swiping-imaginary-touch-screen-color-background-people-future-technology_274234-15776.jpg?ga=GA1.1.1892330260.1722245478&semt=ais_user'
+                    '${model.image}'
                 ),
               ),
               SizedBox(
@@ -89,7 +106,7 @@ class FeedsScreen extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Tariq Ahmed',
+                          '${model.name}',
                           style: TextStyle(
                             height: 1.4,
                           ),
@@ -105,7 +122,7 @@ class FeedsScreen extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      'Jon 21, 2024 at 12:00 pm',
+                      '${model.dateTime}',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Colors.blueGrey[300],
                         height: 1.4,
@@ -137,7 +154,7 @@ class FeedsScreen extends StatelessWidget {
             ),
           ),
           Text(
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry \'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+            '${model.text}',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           Padding(
@@ -194,16 +211,22 @@ class FeedsScreen extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            height: 140.0,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://img.freepik.com/free-photo/smartphone-screen-hand-with-social-media-icons_53876-128999.jpg?t=st=1722246240~exp=1722249840~hmac=ca047e0d68580497429c72a375d3edb584a38376135da55ff45d333c75c3f2c2&w=900'
+          if(model.postImage != '')
+            Padding(
+            padding: const EdgeInsetsDirectional.only(
+              top: 15.0,
+            ),
+            child: Container(
+              height: 140.0,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
+                image: DecorationImage(
+                  image: NetworkImage(
+                      '${model.postImage}'
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -232,7 +255,7 @@ class FeedsScreen extends StatelessWidget {
                             width: 5.0,
                           ),
                           Text(
-                            '120',
+                            '${SocialCubit.get(context).likes[index]}',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Colors.grey
                             ),
@@ -262,7 +285,7 @@ class FeedsScreen extends StatelessWidget {
                             width: 5.0,
                           ),
                           Text(
-                            '120 comment',
+                            '0 comment',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Colors.grey
                             ),
@@ -297,7 +320,7 @@ class FeedsScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 18.0,
                         backgroundImage: NetworkImage(
-                            'https://img.freepik.com/premium-photo/pretty-smiling-girl-swiping-imaginary-touch-screen-color-background-people-future-technology_274234-15776.jpg?ga=GA1.1.1892330260.1722245478&semt=ais_user'
+                            '${SocialCubit.get(context).userModel!.image}'
                         ),
                       ),
                       SizedBox(
@@ -334,7 +357,11 @@ class FeedsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                onTap: (){},
+                onTap: ()
+                {
+                  SocialCubit.get(context).likePost(
+                      SocialCubit.get(context).postsId[index]);
+                },
               ),
             ],
           ),
