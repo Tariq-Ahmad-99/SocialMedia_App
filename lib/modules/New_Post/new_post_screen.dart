@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
+import 'package:peki_media/models/user_model.dart';
 
 import '../../shared/components/components.dart';
 
@@ -58,7 +59,7 @@ class NewPostScreen extends StatelessWidget
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                          'https://img.freepik.com/premium-photo/pretty-smiling-girl-swiping-imaginary-touch-screen-color-background-people-future-technology_274234-15776.jpg?ga=GA1.1.1892330260.1722245478&semt=ais_user'
+                          '${SocialCubit.get(context).userModel?.image}'//https://img.freepik.com/premium-photo/pretty-smiling-girl-swiping-imaginary-touch-screen-color-background-people-future-technology_274234-15776.jpg?ga=GA1.1.1892330260.1722245478&semt=ais_user
                       ),
                     ),
                     SizedBox(
@@ -66,7 +67,7 @@ class NewPostScreen extends StatelessWidget
                     ),
                     Expanded(
                       child: Text(
-                        'Tariq Ahmed',
+                        '${SocialCubit.get(context).userModel?.name}',
                         style: TextStyle(
                           height: 1.4,
                         ),

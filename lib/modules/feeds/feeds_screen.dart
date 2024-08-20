@@ -334,7 +334,9 @@ class FeedsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: (){},
+                  onTap: (){
+
+                  },
                 ),
               ),
               InkWell(

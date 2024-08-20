@@ -1,3 +1,4 @@
+import 'package:airtable_icons/airtable_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
@@ -59,7 +60,7 @@ class SocialLayout extends StatelessWidget
             const [
               BottomNavigationBarItem(
                   icon: Icon(
-                    EvaIcons.home,
+                    AirtableIcons.home,
                   ),
                   label: 'Home',
               ),
@@ -71,7 +72,7 @@ class SocialLayout extends StatelessWidget
               ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.post_add_outlined,
+                  AirtableIcons.plusfilled,
                 ),
                 label: 'Post',
               ),

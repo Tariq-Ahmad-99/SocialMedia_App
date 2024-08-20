@@ -19,7 +19,7 @@ class SocialCubit extends Cubit<SocialState> {
 
   static SocialCubit get(context) => BlocProvider.of(context);
 
-  SocialUserModel? userModel;
+  UserModel? userModel;
 
   void getUserData() {
     emit(SocialGetUserLoadingState());
@@ -29,8 +29,7 @@ class SocialCubit extends Cubit<SocialState> {
         .doc(uId)
         .get()
         .then((value) {
-      //print(value.data());
-      userModel = SocialUserModel.fromJson(value.data()!);
+      userModel = UserModel.fromJson(value.data()!);
       emit(SocialGetUserSuccessState());
     })
         .catchError((error) {
@@ -93,7 +92,6 @@ class SocialCubit extends Cubit<SocialState> {
         .then((value) {
           value.ref.getDownloadURL().then((value)
           {
-            //emit(SocialUploadProfileImageSuccessState());
             print(value);
             updateUser(
               name: name,
@@ -136,7 +134,6 @@ class SocialCubit extends Cubit<SocialState> {
         .then((value) {
       value.ref.getDownloadURL().then((value)
       {
-        //emit(SocialUploadCoverImageSuccessState());
         print(value);
         updateUser(
           name: name,
@@ -152,31 +149,6 @@ class SocialCubit extends Cubit<SocialState> {
     });
   }
 
-//
-//   void updateUserImages({
-//     required String name,
-//     required String phone,
-//     required String bio,
-// }){
-//     emit(SocialUserUpdateLoadingState());
-//     if(coverImage != null)
-//     {
-//       uploadCoverImage();
-//     } else if(profileImage != null)
-//     {
-//       uploadProfileImage();
-//     } else if(coverImage != null && profileImage != null)
-//     {
-//
-//     } else
-//     {
-//       updateUser(
-//         name: name,
-//         phone: phone,
-//         bio: bio,
-//       );
-//     }
-//   }
 
   void updateUser({
     required String name,
@@ -186,7 +158,7 @@ class SocialCubit extends Cubit<SocialState> {
     String? image,
   })
   {
-    SocialUserModel model = SocialUserModel(
+    UserModel model = UserModel(
       name: name,
       phone: phone,
       bio: bio,
@@ -331,6 +303,25 @@ class SocialCubit extends Cubit<SocialState> {
     })
         .catchError((error){
           emit(SocialLikePostErrorState(error.toString()));
+    });
+  }
+
+  List<UserModel> users = [];
+
+  void getUsers()
+  {
+    FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((value){
+      value.docs.forEach((element){
+        users.add(UserModel.fromJson(element.data()));
+      });
+
+      emit(SocialGetAllUsersSuccessState());
+    })
+        .catchError((error){
+      emit(SocialGetAllUsersErrorState(error.toString()));
     });
   }
 }
