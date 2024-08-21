@@ -3,7 +3,7 @@ class UserModel
   String? name;
   String? email;
   String? phone;
-  String? uId;
+  late String uId;
   String? image;
   String? cover;
   String? bio;
@@ -13,7 +13,7 @@ class UserModel
     this.name,
     this.email,
     this.phone,
-    this.uId,
+    required this.uId,
     this.image,
     this.cover,
     this.bio,

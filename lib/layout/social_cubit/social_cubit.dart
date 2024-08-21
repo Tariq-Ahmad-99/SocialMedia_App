@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
+import 'package:peki_media/models/message_model.dart';
 import 'package:peki_media/models/post_model.dart';
 import 'package:peki_media/models/user_model.dart';
 import 'package:peki_media/modules/New_Post/new_post_screen.dart';
@@ -56,6 +57,8 @@ class SocialCubit extends Cubit<SocialState> {
   ];
 
   void changeBottomNav(int index) {
+    if (index == 1)
+      getUsers();
     if (index == 2)
       emit(SocialNewPostState());
     else {
@@ -310,18 +313,64 @@ class SocialCubit extends Cubit<SocialState> {
 
   void getUsers()
   {
-    FirebaseFirestore.instance
+    if(users.length == 0)
+      FirebaseFirestore.instance
         .collection('users')
         .get()
         .then((value){
       value.docs.forEach((element){
-        users.add(UserModel.fromJson(element.data()));
+        if(element.data()['uId'] != userModel?.uId)
+          users.add(UserModel.fromJson(element.data()));
       });
 
       emit(SocialGetAllUsersSuccessState());
     })
         .catchError((error){
       emit(SocialGetAllUsersErrorState(error.toString()));
+    });
+  }
+
+  void sendMessage({
+    required String receiverId,
+    required String dateTime,
+    required String text,
+})
+  {
+    MessageModel model = MessageModel(
+      text: text,
+      senderId: userModel?.uId,
+      receiverId: receiverId,
+      dateTime: dateTime,
+    );
+
+    //send my chat
+    FirebaseFirestore.instance
+    .collection('users')
+    .doc(userModel?.uId)
+    .collection('chats')
+    .doc(receiverId)
+    .collection('messages')
+    .add(model.toMap())
+    .then((value) {
+      emit(SocialSendMessageSuccessState());
+    })
+    .catchError((error){
+      emit(SocialSendMessageErrorState());
+    });
+
+    //send receiver chat
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverId)
+        .collection('chats')
+        .doc(userModel?.uId)
+        .collection('messages')
+        .add(model.toMap())
+        .then((value) {
+      emit(SocialSendMessageSuccessState());
+    })
+        .catchError((error){
+      emit(SocialSendMessageErrorState());
     });
   }
 }
