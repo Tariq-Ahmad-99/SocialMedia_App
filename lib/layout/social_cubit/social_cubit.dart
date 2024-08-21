@@ -23,6 +23,12 @@ class SocialCubit extends Cubit<SocialState> {
   UserModel? userModel;
 
   void getUserData() {
+    // Check if uId is not empty or null
+    if (uId.isEmpty) {
+      emit(SocialGetUserErrorState("User ID is empty"));
+      return;
+    }
+
     emit(SocialGetUserLoadingState());
 
     FirebaseFirestore.instance
@@ -30,8 +36,13 @@ class SocialCubit extends Cubit<SocialState> {
         .doc(uId)
         .get()
         .then((value) {
-      userModel = UserModel.fromJson(value.data()!);
-      emit(SocialGetUserSuccessState());
+      // Check if data exists for the user
+      if (value.data() != null) {
+        userModel = UserModel.fromJson(value.data()!);
+        emit(SocialGetUserSuccessState());
+      } else {
+        emit(SocialGetUserErrorState("User data not found"));
+      }
     })
         .catchError((error) {
       print(error.toString());
@@ -264,30 +275,26 @@ class SocialCubit extends Cubit<SocialState> {
   List<PostModel> posts = [];
   List<String> postsId = [];
   List<int> likes = [];
-  void getPosts()
-  {
+  void getPosts() {
+    emit(SocialGetPostsLoadingState()); // Emit loading state initially
+
     FirebaseFirestore.instance
         .collection('posts')
         .get()
-        .then((value){
-          value.docs.forEach((element){
-            element.reference
-            .collection('likes')
-            .get()
-            .then((value) {
-              likes.add(value.docs.length);
-              postsId.add(element.id);
-              posts.add(PostModel.fromJson(element.data()));
-            })
-            .catchError((error){
-
-            });
-          });
-          
-          emit(SocialGetPostsSuccessState());
-    })
-        .catchError((error){
-          emit(SocialGetPostsErrorState(error.toString()));
+        .then((value) async {
+      for (var element in value.docs) {
+        await element.reference.collection('likes').get().then((likesValue) {
+          likes.add(likesValue.docs.length);
+          postsId.add(element.id);
+          posts.add(PostModel.fromJson(element.data()));
+        }).catchError((error) {
+          // Handle errors fetching likes
+          print(error.toString());
+        });
+      }
+      emit(SocialGetPostsSuccessState()); // Emit success state after fetching all posts
+    }).catchError((error) {
+      emit(SocialGetPostsErrorState(error.toString())); // Emit error state if there's a problem
     });
   }
 
