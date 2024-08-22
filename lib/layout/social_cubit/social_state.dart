@@ -77,3 +77,4 @@ class SocialSendMessageSuccessState extends SocialState {}
 class SocialSendMessageErrorState extends SocialState {}
 
 class SocialGetMessageSuccessState extends SocialState {}
+class SocialGetMessageLoadingState extends SocialState {}
