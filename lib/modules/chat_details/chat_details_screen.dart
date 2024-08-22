@@ -1,7 +1,9 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
 import 'package:peki_media/layout/social_cubit/social_state.dart';
+import 'package:peki_media/models/message_model.dart';
 import 'package:peki_media/models/user_model.dart';
 import 'package:peki_media/shared/styles/colors.dart';
 
@@ -17,89 +19,120 @@ class ChatDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SocialCubit, SocialState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            titleSpacing: 0.0,
-            title: Row(
-              children: [
-                CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage(
-                    '${userModel.image}',
-                  ),
-                ),
-                SizedBox(
-                  width: 15.0,
-                ),
-                Text(
-                  '${userModel.name}',
-                ),
-              ],
-            ),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                buildMessage(),
-                buildMyMessage(),
-                Spacer(),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: messageController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'type your message here ...',
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                          ),
-                        ),
+    return Builder(
+      builder: (BuildContext context) {
+        SocialCubit.get(context).getMessage(
+          receiverId: userModel.uId,
+        );
+        return BlocConsumer<SocialCubit, SocialState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                titleSpacing: 0.0,
+                title: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                        '${userModel.image}',
                       ),
-                      Container(
-                        height: 50.0,
-                        color: defaultColor,
-                        child: MaterialButton(
-                          onPressed: ()
-                          {
-                            SocialCubit.get(context).sendMessage(
-                              receiverId: userModel.uId,
-                              dateTime: DateTime.now().toString(),
-                              text: messageController.text,
-                            );
-                          },
-                          minWidth: 1.0,
-                          child: Icon(
-                            Icons.send_sharp,
-                            size: 16.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: 15.0,
+                    ),
+                    Text(
+                      '${userModel.name}',
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+              body: ConditionalBuilder(
+                condition: SocialCubit
+                    .get(context)
+                    .messages
+                    .length > 0,
+                builder: (context) =>
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children:
+                        [
+                          Expanded(
+                            child: ListView.separated(
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, index)
+                            {
+                              var message = SocialCubit.get(context).messages[index];
+                              if(SocialCubit.get(context).userModel?.uId == message.senderId)
+                                return buildMyMessage(message);
+                              return buildMessage(message);
+                            },
+                              separatorBuilder: (context, state) => SizedBox(
+                                height: 15.0,
+                              ),
+                              itemCount: SocialCubit.get(context).messages.length,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: messageController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'type your message here ...',
+                                      contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10.0),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 50.0,
+                                  color: defaultColor,
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      SocialCubit.get(context).sendMessage(
+                                        receiverId: userModel.uId,
+                                        dateTime: DateTime.now().toString(),
+                                        text: messageController.text,
+                                      );
+                                    },
+                                    minWidth: 1.0,
+                                    child: Icon(
+                                      Icons.send_sharp,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                fallback: (context) =>
+                    Center(child: CircularProgressIndicator(),),
+              ),
+            );
+          },
         );
       },
     );
   }
 
-  Widget buildMessage() => Align(
+  Widget buildMessage(MessageModel model) =>
+      Align(
         alignment: AlignmentDirectional.centerStart,
         child: Container(
           decoration: BoxDecoration(
@@ -115,12 +148,13 @@ class ChatDetailsScreen extends StatelessWidget {
             horizontal: 10.0,
           ),
           child: Text(
-            'hello world',
+            '${model.text}',
           ),
         ),
       );
 
-  Widget buildMyMessage() => Align(
+  Widget buildMyMessage(MessageModel model) =>
+      Align(
         alignment: AlignmentDirectional.centerEnd,
         child: Container(
           decoration: BoxDecoration(
@@ -138,7 +172,7 @@ class ChatDetailsScreen extends StatelessWidget {
             horizontal: 10.0,
           ),
           child: Text(
-            'hello world',
+            '${model.text}',
           ),
         ),
       );
