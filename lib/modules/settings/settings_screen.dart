@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peki_media/layout/social_cubit/social_cubit.dart';
@@ -187,6 +188,29 @@ class SettingsScreen extends StatelessWidget
                     child: Icon(
                       EvaIcons.edit2Outline,
                       size: 18.0,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  OutlinedButton(
+                    onPressed: () {
+                      FirebaseMessaging.instance.subscribeToTopic('announcement');
+                    },
+                    child: Text(
+                      'subscribe',
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                  OutlinedButton(
+                    onPressed: () {
+                      FirebaseMessaging.instance.unsubscribeFromTopic('announcement');
+                    },
+                    child: Text(
+                      'unsubscribe',
                     ),
                   ),
                 ],
