@@ -11,8 +11,6 @@ import 'package:peki_media/shared/network/local/cache_helper.dart';
 import 'package:peki_media/shared/network/remote/dio_helper.dart';
 import 'package:peki_media/shared/styles/themes.dart';
 import 'layout/social_cubit/social_cubit.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async
 {
@@ -30,23 +28,6 @@ void main() async
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-
-  // Create Notification Channel
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id must match the one in AndroidManifest.xml
-    'High Importance Notifications', // name of the channel
-    description: 'This channel is used for important notifications.', // description of the channel
-    importance: Importance.high,
-  );
-
-  // Initialize the Flutter Local Notifications Plugin
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
 
   // Rest of your main function
   var token = await FirebaseMessaging.instance.getToken();
